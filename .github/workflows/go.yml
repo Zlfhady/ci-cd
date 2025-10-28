@@ -11,40 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      # 2. Setup Go environment
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.20'
 
-      # 3. Build Go project
-      - name: Build
+      - name: Build Go App
         run: go build -v ./...
 
-      # 4. Run tests
-      - name: Test
+      - name: Run Tests
         run: go test -v ./...
 
-      # 5. Login to Docker Hub
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.zulfahady }}
-          password: ${{ secrets.dckr_pat_AuCWEP9bQrZ9_PRFnU0QlufG2fE }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # 6. Set up QEMU
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
-      # 7. Set up Docker Buildx
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # 8. Build and push Docker image
-      - name: Build and push
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
           push: true
